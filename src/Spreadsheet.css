@@ -1,0 +1,11 @@
+table.Spreadsheet > tbody.Spreadsheet-body > tr > td,
+table.Spreadsheet > tbody.Spreadsheet-body > tr > th
+{
+    text-align: right;
+    padding: .25rem;
+}
+
+table.Spreadsheet > thead
+{
+    position: -webkit-sticky; position: sticky; top: 0px; z-index: 100;
+}
