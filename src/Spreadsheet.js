@@ -3,6 +3,7 @@ import './Spreadsheet.css'
 import { Table } from 'react-bootstrap'
 import { Day } from './Day.js'
 import CoronaCache from './CoronaCache.js'
+import Modal from './Modal.js'
 
 class Spreadsheet extends Component {
   constructor(props) {
@@ -11,15 +12,23 @@ class Spreadsheet extends Component {
   }
 
 	componentDidMount() {
-    console.log('Spreadsheet componentDidMount')
     this.setState({
       days: [],
       meta: {},
       hasDays: false,
-      isFetching: true
+      isFetching: true,
+      activeDay: false,
+      isOpen: false
     })
 
     new CoronaCache({callback: this.setData.bind(this)})
+  }
+
+  toggleModal = event => {
+    this.setState({
+      activeDay: this.state.days[event.currentTarget.dataset.id],
+      isOpen: !this.state.isOpen
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -27,19 +36,23 @@ class Spreadsheet extends Component {
       this.setState()
   }
 
+  state = {
+    isShowingModal: false,
+  }
+  handleClick = () => this.setState({isShowingModal: true})
+  handleClose = () => this.setState({isShowingModal: false})
+
   shouldComponentUpdate(props) {
     return true
   }
 
   setData(days) {
     days = this.formatData(days.data)
-    this.setState({ days: days, isFetching: false, hasDays: true})
+    this.setState({ days: days, isFetching: false, hasDays: true, isOpen: false, activeDay: false})
   }
 
   formatData(days)
   {
-    var recovered = 0;
-    var prevActivelyInfected = 0
     var prevDay = null
     days.reverse().map((day, i) => {
       let dayObject = new Day({ index: i, day: day, prevDay: prevDay  })
@@ -52,7 +65,6 @@ class Spreadsheet extends Component {
 
   render() {
     const { days } = this.state
-
 		return (
       <div className="Spreadsheet-container">
         <script>var data = {JSON.stringify(days)}</script>
@@ -72,8 +84,11 @@ class Spreadsheet extends Component {
           </thead>
           <tbody className="Spreadsheet-body">
             {days.reverse().map((day, i) =>
-              <tr key={i} keyname={day.idx}>
-                <td className="Date" >{day.date}</td>
+              <tr key={i} keyname={day.idx} onClick={this.toggleModal} data-id={day.index}>
+
+                <td className="Date" >
+                  {day.date}
+                </td>
                 <td className="Confirmed" >{day.positive.toLocaleString(navigator.language, { minimumFractionDigits: 0 })}</td>
                 <td className="NewInfected" >{day.newPositive.toLocaleString(navigator.language, { minimumFractionDigits: 0 })}</td>
                 <td className="Recovered" >{day.recovered > 0 ? day.recovered.toLocaleString(navigator.language, { minimumFractionDigits: 0 }) : ''}</td>
@@ -82,13 +97,14 @@ class Spreadsheet extends Component {
                 <td className="Dead" >{day.death > 0 ? day.death.toLocaleString(navigator.language, { minimumFractionDigits: 0 }) : ''}</td>
                 <td className="ActiveInfected" >{day.activeInfected.toLocaleString(navigator.language, { minimumFractionDigits: 0 })}</td>
                 <td className="InfectionRate">{day.infectionRate}</td>
-              </tr>
-            )}
-          </tbody>
+                </tr>
+              )}
+            </tbody>
         </Table>
+        <Modal show={this.state.isOpen} onClose={this.toggleModal} day={this.state.activeDay} />
       </div>
 		)
-  }		
+  }
 }
 export default Spreadsheet;
   

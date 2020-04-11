@@ -9,3 +9,10 @@ table.Spreadsheet > thead
 {
     position: -webkit-sticky; position: sticky; top: 0px; z-index: 100;
 }
+
+table.DialogTable > tbody > tr > th,
+table.DialogTable > tbody > tr > td
+{
+	padding: .25rem;
+	text-align: right
+}

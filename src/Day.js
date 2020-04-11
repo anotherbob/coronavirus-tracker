@@ -1,10 +1,11 @@
 export class Day {
     constructor(props) {
-        this.index = props.index;
-				this.day = props.day;
-				this.prevDay = props.prevDay;
+    	this.index = props.index;
+			this.day = props.day;
+			this.prevDay = props.prevDay;
 
-				this.row = this.row()
+			this.formatNumbers()
+			this.row = this.row()
     }
 
     newPositive() {
@@ -37,8 +38,44 @@ export class Day {
 			return date.toLocaleDateString("en-US", options)
 		}
 
+		formatNumbers() {
+			this.day.formattedNumbers = {};
+
+			[
+				"states",
+				"positive",
+				"negative",
+				"pending",
+				"hospitalizedCurrently",
+				"hospitalizedCumulative",
+				"inIcuCurrently",
+				"inIcuCumulative",
+				"onVentilatorCurrently",
+				"onVentilatorCumulative",
+				"recovered",
+				"death",
+				"hospitalized",
+				"total",
+				"totalTestResults",
+				"posNeg",
+				"deathIncrease",
+				"hospitalizedIncrease",
+				"negativeIncrease",
+				"positiveIncrease",
+				"totalTestResultsIncrease",
+				"prevActiveInfected",
+				"newPositive",
+				"totalRecovered",
+				"activeInfected"
+			].forEach(key => {
+				this.day.formattedNumbers[key] = this.day[key] ? this.day[key].toLocaleString(navigator.language, { minimumFractionDigits: 0 }) : ''
+			})
+		}
+
 		row() {
 			return Object.assign(this.day, {
+				index: this.index,
+				formatted: this.formattedNumbers,
 				prevActiveInfected: this.prevActiveInfected(),
 				newPositive: this.newPositive(),
 				totalRecovered: this.totalRecovered(),
