@@ -4,6 +4,8 @@ import { Table } from 'react-bootstrap'
 import { Day } from './Day.js'
 import CoronaCache from './CoronaCache.js'
 import Modal from './Modal.js'
+import {Button} from 'react-bootstrap'
+import ModalChart from './ModalChart.js'
 
 class Spreadsheet extends Component {
   constructor(props) {
@@ -18,7 +20,8 @@ class Spreadsheet extends Component {
       hasDays: false,
       isFetching: true,
       activeDay: false,
-      isOpen: false
+			isOpen: false,
+			modalChartIsOpen: false
     })
 
     new CoronaCache({callback: this.setData.bind(this)})
@@ -30,6 +33,10 @@ class Spreadsheet extends Component {
       isOpen: !this.state.isOpen
     });
   }
+
+	toggleModalChart = event => {
+		this.setState({modalChartIsOpen: !this.state.modalChartIsOpen})
+	}
 
   componentDidUpdate(prevProps) {
     if (this.props.days !== prevProps.days)
@@ -51,10 +58,9 @@ class Spreadsheet extends Component {
     this.setState({ days: days, isFetching: false, hasDays: true, isOpen: false, activeDay: false})
   }
 
-  formatData(days)
-  {
+  formatData(days) {
     var prevDay = null
-    days.reverse().map((day, i) => {
+    days.reverse().forEach((day, i) => {
       let dayObject = new Day({ index: i, day: day, prevDay: prevDay  })
       days[i] = dayObject.row
       prevDay = dayObject
@@ -67,6 +73,7 @@ class Spreadsheet extends Component {
     const { days } = this.state
 		return (
       <div className="Spreadsheet-container">
+				<p><Button variant="primary" onClick={this.toggleModalChart}>Chart</Button></p>
         <script>var data = {JSON.stringify(days)}</script>
         <Table striped bordered hover className="Spreadsheet">
           <thead className="Spreadsheet-header">
@@ -102,6 +109,7 @@ class Spreadsheet extends Component {
             </tbody>
         </Table>
         <Modal show={this.state.isOpen} onClose={this.toggleModal} day={this.state.activeDay} />
+				<ModalChart show={this.state.modalChartIsOpen} onClose={this.toggleModalChart} days={days} />
       </div>
 		)
   }

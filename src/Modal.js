@@ -3,6 +3,7 @@ import { Table } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import lodash from 'lodash'
 
+// lifted from https://daveceddia.com/open-modal-in-react/
 class Modal extends React.Component {
   render() {
     // Render nothing if the "show" prop is false
@@ -57,12 +58,7 @@ class Modal extends React.Component {
 								</tbody>
 							</Table>
 						</div>
-					: '-' }
-          <div className="footer">
-            <button onClick={this.props.onClose}>
-              Close
-            </button>
-          </div>
+					: '' }
         </div>
       </div>
     );

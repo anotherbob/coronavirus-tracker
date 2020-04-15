@@ -1,3 +1,5 @@
+import { columnKeys } from './Columns.js'
+
 export class Day {
     constructor(props) {
     	this.index = props.index;
@@ -40,40 +42,13 @@ export class Day {
 
 		formatNumbers() {
 			this.day.formattedNumbers = {};
-
-			[
-				"states",
-				"positive",
-				"negative",
-				"pending",
-				"hospitalizedCurrently",
-				"hospitalizedCumulative",
-				"inIcuCurrently",
-				"inIcuCumulative",
-				"onVentilatorCurrently",
-				"onVentilatorCumulative",
-				"recovered",
-				"death",
-				"hospitalized",
-				"total",
-				"totalTestResults",
-				"posNeg",
-				"deathIncrease",
-				"hospitalizedIncrease",
-				"negativeIncrease",
-				"positiveIncrease",
-				"totalTestResultsIncrease",
-				"prevActiveInfected",
-				"newPositive",
-				"totalRecovered",
-				"activeInfected"
-			].forEach(key => {
+			columnKeys.forEach(key => {
 				this.day.formattedNumbers[key] = this.day[key] ? this.day[key].toLocaleString(navigator.language, { minimumFractionDigits: 0 }) : ''
 			})
 		}
 
 		row() {
-			return Object.assign(this.day, {
+			return { ...this.day,
 				index: this.index,
 				formatted: this.formattedNumbers,
 				prevActiveInfected: this.prevActiveInfected(),
@@ -82,6 +57,6 @@ export class Day {
 				activeInfected: this.activeInfected(),
 				infectionRate: this.infectionRate(),
 				date: this.date()
-			})
+			}
 		}
 }

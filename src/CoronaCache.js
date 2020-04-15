@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment'
 
 class CoronaCache
 {
@@ -7,22 +8,18 @@ class CoronaCache
 			this.callback = props.callback
 		}
 
-		this.setDate()
+		this.setEarliestDate()
 		this.loadCachedDays()
 
+		this.valid = false
 		if (!this.valid)
 		{
 			this.buildCache()
 		}
  	}
 
- 	setDate() {
-		console.log('setDate')
- 	 	let date = new Date();
- 	 	let maxCacheAge = (0 === date.getDay()) ? -2 : -1
- 	 	date.setDate(date.getDate() - maxCacheAge)
-
- 	 	this.earliestCacheDate = parseInt(date.getFullYear() + ("0"+(date.getMonth()+1)).slice(-2) + ("0" + date.getDate()).slice(-2))
+ 	setEarliestDate() {
+			this.earliestCacheDate = moment().subtract(3, 'hours').toDate()
  	}
 
  	loadCachedDays()
@@ -33,9 +30,9 @@ class CoronaCache
 			this.valid = false
 			return false
  	 	}
-			
+		
 		this.coronaData = JSON.parse(cachedData)
-		let cacheDate = this.coronaData.lastDay
+		let cacheDate = this.coronaData.cacheTimestamp
 
  	  if (cacheDate < this.earliestCacheDate) {
 			this.valid = false
@@ -49,7 +46,7 @@ class CoronaCache
 	buildCache() {
 		axios.get('https://covidtracking.com/api/us/daily')
 			.then(response => {
-				this.coronaData = { cacheDate: Date.now(), data: response.data}
+				this.coronaData = { cacheTimestamp: Date.now(), data: response.data}
 				localStorage.setItem('coronadata', JSON.stringify(this.coronaData))
 				this.callback(this.coronaData)		
 			})
