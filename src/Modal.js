@@ -42,8 +42,8 @@ class Modal extends React.Component {
 							<Table className="DialogTable" striped bordered hover>
 								<tbody>
 								{
-									Object.keys(this.props.day.formattedNumbers).map((key) =>
-										<tr>
+									Object.keys(this.props.day.formattedNumbers).map((key, i) =>
+										<tr key={i}>
 											<th>{lodash.startCase(key)}</th>
 											<td>{
 												this.props.day.formattedNumbers[key].length > 0 
