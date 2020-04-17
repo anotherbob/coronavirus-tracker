@@ -16,7 +16,6 @@ class ModalChart extends React.Component {
 				newArray.push({"value" : value, "label": lodash.startCase(value)})
 			}
 		)
-
 		return newArray
 	}
 
@@ -189,12 +188,11 @@ class ModalChart extends React.Component {
 			width: '100%',
 			textAlign: 'right'
 		}
-		this.getDatasets()
 
 		const data = {
 			labels: this.getLabels(),
 			datasets: this.getDatasets()
-		};
+		}
 
 		return (
       <div className="backdrop" style={backdropStyle}>
@@ -226,7 +224,7 @@ class ModalChart extends React.Component {
 					</div>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -234,6 +232,6 @@ ModalChart.propTypes = {
   onClose: PropTypes.func.isRequired,
   show: PropTypes.bool,
 	days: PropTypes.array
-};
+}
 
-export default ModalChart;
+export default ModalChart

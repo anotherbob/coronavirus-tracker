@@ -1,13 +1,19 @@
-table.Spreadsheet > tbody.Spreadsheet-body > tr > td,
-table.Spreadsheet > tbody.Spreadsheet-body > tr > th
+table.Spreadsheet > tbody > tr > td,
+table.Spreadsheet > thead > tr > th
 {
-    text-align: right;
-    padding: .25rem;
+	font-size: 13px;
+  text-align: right;
+  padding: .125rem;
+}
+
+table.Spreadsheet > tbody.Spreadsheet-body > tr > th:first-child
+{
+	min-width: 120px;
 }
 
 table.Spreadsheet > thead
 {
-    position: -webkit-sticky; position: sticky; top: 0px; z-index: 100;
+  position: -webkit-sticky; position: sticky; top: 0px; z-index: 100;
 }
 
 table.DialogTable > tbody > tr > th,
