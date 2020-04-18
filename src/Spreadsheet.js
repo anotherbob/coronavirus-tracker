@@ -90,7 +90,7 @@ class Spreadsheet extends Component {
             </tr>
           </thead>
           <tbody className="Spreadsheet-body">
-            {days.reverse().map((day, i) =>
+            {days.map((day, i) =>
               <tr key={i} keyname={day.idx} onClick={this.toggleModal} data-id={day.index}>
                 <td className="Date" >
                   {day.date}
